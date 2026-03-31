@@ -1,29 +1,25 @@
 package com.jeromedusanter.fdjtest.ui.screen.teamslist
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
-import com.jeromedusanter.fdjtest.domain.model.Team
 import com.jeromedusanter.fdjtest.domain.usecase.GetTeamsByLeagueUseCase
-import com.jeromedusanter.fdjtest.ui.navigation.TeamsListScreen
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class TeamsListViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
-    private val getTeamsByLeagueUseCase: GetTeamsByLeagueUseCase
+@HiltViewModel(assistedFactory = TeamsListViewModel.Factory::class)
+class TeamsListViewModel @AssistedInject constructor(
+    private val getTeamsByLeagueUseCase: GetTeamsByLeagueUseCase,
+    @Assisted val leagueName: String,
 ) : ViewModel() {
 
-    private val teamsListScreen: TeamsListScreen = savedStateHandle.toRoute()
-
-    private val _uiState = MutableStateFlow(TeamsListUiState(leagueName = teamsListScreen.leagueName))
+    private val _uiState = MutableStateFlow(TeamsListUiState(leagueName = leagueName))
     val uiState: StateFlow<TeamsListUiState> = _uiState.asStateFlow()
 
     init {
@@ -34,7 +30,7 @@ class TeamsListViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
-            getTeamsByLeagueUseCase(teamsListScreen.leagueName)
+            getTeamsByLeagueUseCase(leagueName)
                 .onSuccess { teams ->
                     _uiState.update {
                         it.copy(
@@ -56,5 +52,10 @@ class TeamsListViewModel @Inject constructor(
 
     fun retry() {
         loadTeams()
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(leagueName: String): TeamsListViewModel
     }
 }

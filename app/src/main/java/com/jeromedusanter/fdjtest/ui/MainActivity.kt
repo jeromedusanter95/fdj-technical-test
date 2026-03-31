@@ -10,10 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.jeromedusanter.fdjtest.ui.navigation.LeagueSearchScreen
 import com.jeromedusanter.fdjtest.ui.navigation.TeamsListScreen
-import com.jeromedusanter.fdjtest.ui.screen.teamslist.TeamsListScreen as TeamsListScreenComposable
-import com.jeromedusanter.fdjtest.ui.screen.leaguesearch.LeagueSearchScreen as LeagueSearchScreenComposable
+import com.jeromedusanter.fdjtest.ui.screen.leaguesearch.LeagueSearchScreen
+import com.jeromedusanter.fdjtest.ui.screen.teamslist.TeamsListScreen
 import com.jeromedusanter.fdjtest.ui.theme.FDJTestTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,15 +41,17 @@ fun FdjTestApp(modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxSize()
     ) {
         composable<LeagueSearchScreen> {
-            LeagueSearchScreenComposable(
+            LeagueSearchScreen(
                 onLeagueSelected = { leagueName ->
                     navController.navigate(TeamsListScreen(leagueName = leagueName))
                 }
             )
         }
 
-        composable<TeamsListScreen> {
-            TeamsListScreenComposable(
+        composable<TeamsListScreen> { backStackEntry ->
+            val teamsListScreen = backStackEntry.toRoute<TeamsListScreen>()
+            TeamsListScreen(
+                leagueName = teamsListScreen.leagueName,
                 onBackClick = {
                     navController.popBackStack()
                 }

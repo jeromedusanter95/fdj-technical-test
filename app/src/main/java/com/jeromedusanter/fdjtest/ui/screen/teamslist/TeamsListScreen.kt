@@ -9,9 +9,12 @@ import com.jeromedusanter.fdjtest.ui.screen.teamslist.components.TeamsListConten
 
 @Composable
 fun TeamsListScreen(
+    leagueName: String,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: TeamsListViewModel = hiltViewModel()
+    viewModel: TeamsListViewModel = hiltViewModel<TeamsListViewModel, TeamsListViewModel.Factory> { factory ->
+        factory.create(leagueName)
+    }
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
