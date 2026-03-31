@@ -58,11 +58,11 @@ class SportsRepositoryImplTest {
     }
 
     @Test
-    fun `getAllLeagues should filter out leagues with null or empty fields`() = runTest {
+    fun `getAllLeagues should convert null fields to empty strings`() = runTest {
         // Given
         val leagueDtos = listOf(
             LeagueDto(id = "1", name = "English Premier League", sport = "Soccer"),
-            LeagueDto(id = null, name = "Invalid League", sport = "Soccer"),
+            LeagueDto(id = null, name = "League with null id", sport = "Soccer"),
             LeagueDto(id = "3", name = null, sport = "Soccer"),
             LeagueDto(id = "4", name = "Spanish La Liga", sport = null)
         )
@@ -75,8 +75,11 @@ class SportsRepositoryImplTest {
         // Then
         assertTrue(result.isSuccess)
         val leagues = result.getOrNull()
-        assertEquals(1, leagues?.size)
+        assertEquals(4, leagues?.size)
         assertEquals("English Premier League", leagues?.get(0)?.name)
+        assertEquals("", leagues?.get(1)?.id)  // null converted to empty string
+        assertEquals("", leagues?.get(2)?.name)  // null converted to empty string
+        assertEquals("", leagues?.get(3)?.sport)  // null converted to empty string
     }
 
     @Test
@@ -150,13 +153,13 @@ class SportsRepositoryImplTest {
     }
 
     @Test
-    fun `getTeamsByLeague should filter out teams with null or empty required fields`() = runTest {
+    fun `getTeamsByLeague should convert null fields to empty strings`() = runTest {
         // Given
         val teamDtos = listOf(
             TeamDto(id = "1", name = "Valid Team", badgeUrl = "badge.png", leagueName = "League"),
-            TeamDto(id = null, name = "Invalid Team", badgeUrl = "badge.png", leagueName = "League"),
+            TeamDto(id = null, name = "Team with null id", badgeUrl = "badge.png", leagueName = "League"),
             TeamDto(id = "3", name = null, badgeUrl = "badge.png", leagueName = "League"),
-            TeamDto(id = "4", name = "Another Team", badgeUrl = "badge.png", leagueName = null)
+            TeamDto(id = "4", name = "Team with null league", badgeUrl = "badge.png", leagueName = null)
         )
         val response = TeamsResponse(teams = teamDtos)
         coEvery { apiService.getTeamsByLeague("League") } returns response
@@ -167,8 +170,11 @@ class SportsRepositoryImplTest {
         // Then
         assertTrue(result.isSuccess)
         val teams = result.getOrNull()
-        assertEquals(1, teams?.size)
+        assertEquals(4, teams?.size)
         assertEquals("Valid Team", teams?.get(0)?.name)
+        assertEquals("", teams?.get(1)?.id)  // null converted to empty string
+        assertEquals("", teams?.get(2)?.name)  // null converted to empty string
+        assertEquals("", teams?.get(3)?.league)  // null converted to empty string
     }
 
     @Test
