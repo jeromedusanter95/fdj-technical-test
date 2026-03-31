@@ -164,7 +164,3 @@ class MainDispatcherRule(
 **Jérôme Dusanter**
 - GitHub: [@jerome-dusanter](https://github.com/jerome-dusanter)
 - Email: dusanter.jerome@gmail.com
-
----
-
-🤖 Built with assistance from [Claude Code](https://claude.com/claude-code)
