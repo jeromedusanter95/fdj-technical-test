@@ -16,21 +16,21 @@ fun FdjNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = LeagueSearchScreen,
+        startDestination = LeagueSearchDestination,
         modifier = modifier
     ) {
-        composable<LeagueSearchScreen> {
+        composable<LeagueSearchDestination> {
             LeagueSearchScreen(
                 onLeagueSelected = { leagueName ->
-                    navController.navigate(TeamsListScreen(leagueName = leagueName))
+                    navController.navigate(TeamsListDestination(leagueName = leagueName))
                 }
             )
         }
 
-        composable<TeamsListScreen> { backStackEntry ->
-            val teamsListScreen = backStackEntry.toRoute<TeamsListScreen>()
+        composable<TeamsListDestination> { backStackEntry ->
+            val teamsListDestination = backStackEntry.toRoute<TeamsListDestination>()
             TeamsListScreen(
-                leagueName = teamsListScreen.leagueName,
+                leagueName = teamsListDestination.leagueName,
                 onBackClick = {
                     navController.popBackStack()
                 }
