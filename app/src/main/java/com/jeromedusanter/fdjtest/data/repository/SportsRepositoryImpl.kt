@@ -14,13 +14,13 @@ import kotlinx.coroutines.withContext
 
 class SportsRepositoryImpl @Inject constructor(
     private val apiService: SportsApiService,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : SportsRepository {
 
     override suspend fun getAllLeagues(): Result<List<League>> = withContext(ioDispatcher) {
         try {
             val response = apiService.getAllLeagues()
-            val leagues = response.leagues?.mapNotNull { it.toDomainModel() } ?: emptyList()
+            val leagues = response.leagues?.map { it.toDomainModel() }.orEmpty()
             Result.Success(leagues)
         } catch (e: Exception) {
             Result.Error(e)
@@ -30,25 +30,25 @@ class SportsRepositoryImpl @Inject constructor(
     override suspend fun getTeamsByLeague(leagueName: String): Result<List<Team>> = withContext(ioDispatcher) {
         try {
             val response = apiService.getTeamsByLeague(leagueName)
-            val teams = response.teams?.mapNotNull { it.toDomainModel() } ?: emptyList()
+            val teams = response.teams?.map { it.toDomainModel() }.orEmpty()
             Result.Success(teams)
         } catch (e: Exception) {
             Result.Error(e)
         }
     }
 
-    private fun LeagueDto.toDomainModel(): League? {
-        val id = id ?: return null
-        val name = name ?: return null
-        val sport = sport ?: return null
+    private fun LeagueDto.toDomainModel(): League {
+        val id = id.orEmpty()
+        val name = name.orEmpty()
+        val sport = sport.orEmpty()
         return League(id = id, name = name, sport = sport)
     }
 
-    private fun TeamDto.toDomainModel(): Team? {
-        val id = id ?: return null
-        val name = name ?: return null
+    private fun TeamDto.toDomainModel(): Team {
+        val id = id.orEmpty()
+        val name = name.orEmpty()
         val badgeUrl = badgeUrl.orEmpty()
-        val league = leagueName ?: return null
+        val league = leagueName.orEmpty()
         return Team(id = id, name = name, badgeUrl = badgeUrl, league = league)
     }
 }
