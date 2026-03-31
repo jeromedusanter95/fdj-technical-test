@@ -10,8 +10,8 @@ class GetTeamsByLeagueUseCase @Inject constructor(
     suspend operator fun invoke(leagueName: String): Result<List<Team>> {
         return repository.getTeamsByLeague(leagueName).map { teams ->
             teams
-                .sortedByDescending { it.name }
                 .filterIndexed { index, _ -> index % 2 == 0 }
+                .sortedByDescending { it.name }
         }
     }
 }
