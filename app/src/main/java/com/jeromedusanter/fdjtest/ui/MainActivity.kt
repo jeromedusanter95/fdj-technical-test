@@ -1,4 +1,4 @@
-package com.jeromedusanter.fdjtest
+package com.jeromedusanter.fdjtest.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import com.jeromedusanter.fdjtest.ui.navigation.LeagueSearchScreen
 import com.jeromedusanter.fdjtest.ui.navigation.TeamsListScreen
 import com.jeromedusanter.fdjtest.ui.screen.teamslist.TeamsListScreen as TeamsListScreenComposable
