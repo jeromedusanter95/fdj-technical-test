@@ -20,7 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jeromedusanter.fdjtest.domain.model.Team
-import com.jeromedusanter.fdjtest.ui.components.ErrorMessage
+import com.jeromedusanter.fdjtest.ui.components.EmptyState
+import com.jeromedusanter.fdjtest.ui.components.ErrorState
 import com.jeromedusanter.fdjtest.ui.components.LoadingIndicator
 import com.jeromedusanter.fdjtest.ui.screen.teamslist.TeamsListUiState
 
@@ -53,16 +54,15 @@ fun TeamsListContent(
                 LoadingIndicator(modifier = Modifier.padding(paddingValues))
             }
             uiState.errorMessage != null -> {
-                ErrorMessage(
+                ErrorState(
                     message = uiState.errorMessage,
                     onRetry = onRetry,
                     modifier = Modifier.padding(paddingValues)
                 )
             }
             uiState.teams.isEmpty() -> {
-                ErrorMessage(
+                EmptyState(
                     message = "No teams found for this league",
-                    onRetry = onRetry,
                     modifier = Modifier.padding(paddingValues)
                 )
             }

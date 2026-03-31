@@ -14,9 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jeromedusanter.fdjtest.domain.model.League
-import com.jeromedusanter.fdjtest.ui.components.LottieEmptyState
-import com.jeromedusanter.fdjtest.ui.components.LottieErrorState
-import com.jeromedusanter.fdjtest.ui.components.LottieLoadingState
+import com.jeromedusanter.fdjtest.ui.components.EmptyState
+import com.jeromedusanter.fdjtest.ui.components.ErrorState
+import com.jeromedusanter.fdjtest.ui.components.LoadingIndicator
 import com.jeromedusanter.fdjtest.ui.components.SearchTextField
 import com.jeromedusanter.fdjtest.ui.screen.leaguesearch.LeagueSearchUiState
 
@@ -49,16 +49,16 @@ fun LeagueSearchContent(
 
             when {
                 uiState.isLoading -> {
-                    LottieLoadingState()
+                    LoadingIndicator()
                 }
                 uiState.errorMessage != null -> {
-                    LottieErrorState(
+                    ErrorState(
                         message = uiState.errorMessage,
                         onRetry = onRetry
                     )
                 }
                 uiState.showNoResults -> {
-                    LottieEmptyState(
+                    EmptyState(
                         message = "No leagues found for \"${uiState.searchQuery}\""
                     )
                 }
