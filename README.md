@@ -1,10 +1,66 @@
 # FDJ Test - Sports League Search App
 
-A modern Android application built with Jetpack Compose that allows users to search for sports leagues and view teams within each league. This project demonstrates Clean Architecture principles, MVVM pattern, and Android best practices.
+A technical test application showcasing modern Android development practices. The app allows users to search for sports leagues and view teams within each league using The Sports DB API.
+
+**Built with the help of [Claude Code](https://claude.com/claude-code)**
 
 ## 🏗️ Architecture
 
 This project follows **Clean Architecture** with **MVVM (Model-View-ViewModel)** pattern, organized into three main layers:
+
+### 🔷 Domain Layer (Business Logic)
+**Location:** `domain/`
+
+The core of the application containing business logic and rules. This layer:
+- Has **NO dependencies** on UI or Data layers
+- Contains business entities (`model/`): `League`, `Team`
+- Defines repository interfaces (`repository/`)
+- Implements use cases (`usecase/`): `SearchLeaguesUseCase`, `GetTeamsByLeagueUseCase`, etc.
+- Is pure Kotlin with no Android framework dependencies
+
+### 🔶 Data Layer (Data Sources)
+**Location:** `data/`
+
+Manages data sources and implements domain repository interfaces. This layer:
+- **Depends on:** Domain layer (implements repository interfaces)
+- **Does NOT depend on:** UI layer
+- Contains API services (`api/`): `SportsApiService`
+- Defines DTOs (`model/`): `LeagueDto`, `TeamDto`
+- Implements repositories (`repository/`): `SportsRepositoryImpl`
+- Handles data mapping from DTOs to domain entities
+- Configures dependency injection (`di/`)
+
+### 🔵 UI Layer (Presentation)
+**Location:** `ui/`
+
+Manages the user interface and user interactions. This layer:
+- **Depends on:** Domain layer (uses use cases and domain models)
+- **Does NOT depend on:** Data layer
+- Contains screens (`screen/`): Stateful composables and ViewModels
+- Defines UI state models: `LeagueSearchUiState`, `TeamsListUiState`
+- Implements reusable components (`components/`)
+- Handles navigation (`navigation/`)
+- Defines theme and styling (`theme/`)
+
+### 📐 Dependency Rules
+
+```
+UI Layer ──────> Domain Layer <────── Data Layer
+    ↓                 ↑                  ↑
+    └─────────────────┘                  │
+         (use cases)                     │
+                                         │
+                              (repository interface)
+```
+
+**Critical Rules:**
+- ✅ UI and Data both depend on Domain
+- ✅ Domain has zero dependencies (pure business logic)
+- ❌ UI must NEVER import from Data
+- ❌ Data must NEVER import from UI
+- ❌ Domain must NEVER import from UI or Data
+
+This ensures loose coupling, testability, and adherence to the Dependency Inversion Principle.
 
 ### Architecture Decision: Single Module
 
