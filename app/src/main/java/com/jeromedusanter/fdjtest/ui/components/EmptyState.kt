@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,12 +23,11 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.jeromedusanter.fdjtest.R
 
 @Composable
-fun LottieErrorState(
+fun EmptyState(
     message: String,
-    onRetry: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.lottie_error))
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.lottie_empty))
 
     Column(
         modifier = modifier
@@ -49,23 +47,16 @@ fun LottieErrorState(
         Text(
             text = message,
             style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.error,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = onRetry) {
-            Text("Retry")
-        }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun LottieErrorStatePreview() {
-    LottieErrorState(
-        message = "Failed to load data. Please try again.",
-        onRetry = {}
+private fun EmptyStatePreview() {
+    EmptyState(
+        message = "No results found for your search"
     )
 }
