@@ -3,7 +3,6 @@ package com.jeromedusanter.fdjtest.ui.screen.leaguesearch
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jeromedusanter.fdjtest.domain.model.League
-import com.jeromedusanter.fdjtest.domain.model.Result
 import com.jeromedusanter.fdjtest.domain.usecase.GetAllLeaguesUseCase
 import com.jeromedusanter.fdjtest.domain.usecase.SearchLeaguesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -48,41 +47,39 @@ class LeagueSearchViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
-            when (val result = getAllLeaguesUseCase()) {
-                is Result.Success -> {
+            getAllLeaguesUseCase()
+                .onSuccess { leagues ->
                     _uiState.update {
                         it.copy(
-                            leagues = result.data,
+                            leagues = leagues,
                             isLoading = false
                         )
                     }
                 }
-                is Result.Error -> {
+                .onFailure { exception ->
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            errorMessage = result.exception.message ?: "Unknown error occurred"
+                            errorMessage = exception.message ?: "Unknown error occurred"
                         )
                     }
                 }
-            }
         }
     }
 
     private fun searchLeagues(query: String) {
         viewModelScope.launch {
-            when (val result = searchLeaguesUseCase(query)) {
-                is Result.Success -> {
+            searchLeaguesUseCase(query)
+                .onSuccess { leagues ->
                     _uiState.update {
-                        it.copy(filteredLeagues = result.data)
+                        it.copy(filteredLeagues = leagues)
                     }
                 }
-                is Result.Error -> {
+                .onFailure { exception ->
                     _uiState.update {
-                        it.copy(errorMessage = result.exception.message)
+                        it.copy(errorMessage = exception.message)
                     }
                 }
-            }
         }
     }
 

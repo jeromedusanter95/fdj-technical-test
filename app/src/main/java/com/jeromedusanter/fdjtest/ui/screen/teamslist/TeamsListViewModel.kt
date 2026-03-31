@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.jeromedusanter.fdjtest.domain.model.Result
 import com.jeromedusanter.fdjtest.domain.model.Team
 import com.jeromedusanter.fdjtest.domain.usecase.GetTeamsByLeagueUseCase
 import com.jeromedusanter.fdjtest.ui.navigation.TeamsListScreen
@@ -42,24 +41,23 @@ class TeamsListViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
-            when (val result = getTeamsByLeagueUseCase(teamsListScreen.leagueName)) {
-                is Result.Success -> {
+            getTeamsByLeagueUseCase(teamsListScreen.leagueName)
+                .onSuccess { teams ->
                     _uiState.update {
                         it.copy(
-                            teams = result.data,
+                            teams = teams,
                             isLoading = false
                         )
                     }
                 }
-                is Result.Error -> {
+                .onFailure { exception ->
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            errorMessage = result.exception.message ?: "Unknown error occurred"
+                            errorMessage = exception.message ?: "Unknown error occurred"
                         )
                     }
                 }
-            }
         }
     }
 

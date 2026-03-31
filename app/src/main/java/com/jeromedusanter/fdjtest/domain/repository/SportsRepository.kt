@@ -1,7 +1,6 @@
 package com.jeromedusanter.fdjtest.domain.repository
 
 import com.jeromedusanter.fdjtest.domain.model.League
-import com.jeromedusanter.fdjtest.domain.model.Result
 import com.jeromedusanter.fdjtest.domain.model.Team
 
 interface SportsRepository {

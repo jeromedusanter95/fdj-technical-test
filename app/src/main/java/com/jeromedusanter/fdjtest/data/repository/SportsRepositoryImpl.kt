@@ -4,7 +4,6 @@ import com.jeromedusanter.fdjtest.data.api.SportsApiService
 import com.jeromedusanter.fdjtest.data.model.LeagueDto
 import com.jeromedusanter.fdjtest.data.model.TeamDto
 import com.jeromedusanter.fdjtest.domain.model.League
-import com.jeromedusanter.fdjtest.domain.model.Result
 import com.jeromedusanter.fdjtest.domain.model.Team
 import com.jeromedusanter.fdjtest.domain.repository.SportsRepository
 import com.jeromedusanter.fdjtest.di.IoDispatcher
@@ -18,22 +17,16 @@ class SportsRepositoryImpl @Inject constructor(
 ) : SportsRepository {
 
     override suspend fun getAllLeagues(): Result<List<League>> = withContext(ioDispatcher) {
-        try {
+        runCatching {
             val response = apiService.getAllLeagues()
-            val leagues = response.leagues?.map { it.toDomainModel() }.orEmpty()
-            Result.Success(leagues)
-        } catch (e: Exception) {
-            Result.Error(e)
+            response.leagues?.map { it.toDomainModel() }.orEmpty()
         }
     }
 
     override suspend fun getTeamsByLeague(leagueName: String): Result<List<Team>> = withContext(ioDispatcher) {
-        try {
+        runCatching {
             val response = apiService.getTeamsByLeague(leagueName)
-            val teams = response.teams?.map { it.toDomainModel() }.orEmpty()
-            Result.Success(teams)
-        } catch (e: Exception) {
-            Result.Error(e)
+            response.teams?.map { it.toDomainModel() }.orEmpty()
         }
     }
 
