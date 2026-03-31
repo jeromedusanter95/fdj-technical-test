@@ -10,7 +10,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -21,10 +21,8 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class SportsRepositoryImplTest {
 
-    private val testDispatcher = StandardTestDispatcher()
-
     @get:Rule
-    val mainDispatcherRule = MainDispatcherRule(testDispatcher)
+    val mainDispatcherRule = MainDispatcherRule()
 
     private lateinit var apiService: SportsApiService
     private lateinit var repository: SportsRepositoryImpl
@@ -32,7 +30,7 @@ class SportsRepositoryImplTest {
     @Before
     fun setup() {
         apiService = mockk()
-        repository = SportsRepositoryImpl(apiService, testDispatcher)
+        repository = SportsRepositoryImpl(apiService, UnconfinedTestDispatcher())
     }
 
     @Test
