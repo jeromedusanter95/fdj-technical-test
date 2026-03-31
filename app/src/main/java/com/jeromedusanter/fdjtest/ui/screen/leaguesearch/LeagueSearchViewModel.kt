@@ -15,15 +15,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class LeagueSearchUiState(
-    val searchQuery: String = "",
-    val leagues: List<League> = emptyList(),
-    val filteredLeagues: List<League> = emptyList(),
-    val isLoading: Boolean = false,
-    val errorMessage: String? = null,
-    val showNoResults: Boolean = false
-)
-
 @HiltViewModel
 class LeagueSearchViewModel @Inject constructor(
     private val getAllLeaguesUseCase: GetAllLeaguesUseCase,

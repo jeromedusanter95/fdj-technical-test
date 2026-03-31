@@ -15,13 +15,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class TeamsListUiState(
-    val leagueName: String = "",
-    val teams: List<Team> = emptyList(),
-    val isLoading: Boolean = false,
-    val errorMessage: String? = null
-)
-
 @HiltViewModel
 class TeamsListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
