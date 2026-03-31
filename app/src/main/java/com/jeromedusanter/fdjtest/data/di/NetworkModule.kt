@@ -1,4 +1,4 @@
-package com.jeromedusanter.fdjtest.di
+package com.jeromedusanter.fdjtest.data.di
 
 import com.jeromedusanter.fdjtest.data.api.SportsApiService
 import com.squareup.moshi.Moshi

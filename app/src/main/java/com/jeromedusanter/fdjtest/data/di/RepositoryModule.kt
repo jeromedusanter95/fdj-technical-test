@@ -1,4 +1,4 @@
-package com.jeromedusanter.fdjtest.di
+package com.jeromedusanter.fdjtest.data.di
 
 import com.jeromedusanter.fdjtest.data.repository.SportsRepositoryImpl
 import com.jeromedusanter.fdjtest.domain.repository.SportsRepository

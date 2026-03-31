@@ -23,7 +23,7 @@ class GetTeamsByLeagueUseCaseTest {
     }
 
     @Test
-    fun `invoke should sort teams in reverse alphabetical order and filter every other team`() = runTest {
+    fun `invoke should filter every other team then sort in reverse alphabetical order`() = runTest {
         // Given
         val teams = listOf(
             Team("1", "Arsenal", "badge1.png", "English Premier League"),
@@ -39,12 +39,14 @@ class GetTeamsByLeagueUseCaseTest {
         val result = useCase.invoke("test league")
 
         // Then
+        // Filter: indices 0,2,4 → Arsenal, Chelsea, Everton
+        // Sort descending: Everton, Chelsea, Arsenal
         assertTrue(result.isSuccess)
         val processedTeams = result.getOrNull()
         assertEquals(3, processedTeams?.size)
-        assertEquals("Fiorentina", processedTeams?.get(0)?.name)
-        assertEquals("Dortmund", processedTeams?.get(1)?.name)
-        assertEquals("Barcelona", processedTeams?.get(2)?.name)
+        assertEquals("Everton", processedTeams?.get(0)?.name)
+        assertEquals("Chelsea", processedTeams?.get(1)?.name)
+        assertEquals("Arsenal", processedTeams?.get(2)?.name)
         coVerify(exactly = 1) { repository.getTeamsByLeague("test league") }
     }
 
@@ -79,10 +81,12 @@ class GetTeamsByLeagueUseCaseTest {
         val result = useCase.invoke("test league")
 
         // Then
+        // Filter: index 0 → Arsenal
+        // Sort: Arsenal (single item)
         assertTrue(result.isSuccess)
         val processedTeams = result.getOrNull()
         assertEquals(1, processedTeams?.size)
-        assertEquals("Barcelona", processedTeams?.get(0)?.name)
+        assertEquals("Arsenal", processedTeams?.get(0)?.name)
     }
 
     @Test
