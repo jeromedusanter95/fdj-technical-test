@@ -10,7 +10,7 @@ class SearchLeaguesUseCase @Inject constructor(
     suspend operator fun invoke(query: String): Result<List<League>> {
         return repository.getAllLeagues().map { leagues ->
             if (query.isBlank()) {
-                leagues
+                emptyList()
             } else {
                 leagues.filter { league ->
                     league.name.contains(query, ignoreCase = true)
