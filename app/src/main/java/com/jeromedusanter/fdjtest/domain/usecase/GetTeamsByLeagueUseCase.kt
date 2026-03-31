@@ -11,9 +11,15 @@ class GetTeamsByLeagueUseCase @Inject constructor(
     suspend operator fun invoke(leagueName: String): Result<List<Team>> {
         return when (val result = repository.getTeamsByLeague(leagueName)) {
             is Result.Success -> {
+
+                println(result.data)
+
                 val processedTeams = result.data
                     .sortedByDescending { it.name }
-                    .filterIndexed { index, _ -> index % 2 == 1 }
+                    .filterIndexed { index, _ -> index % 2 == 0 }
+
+
+                println(processedTeams)
 
                 Result.Success(processedTeams)
             }

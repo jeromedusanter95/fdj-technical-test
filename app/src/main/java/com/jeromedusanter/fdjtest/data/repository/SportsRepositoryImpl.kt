@@ -38,17 +38,17 @@ class SportsRepositoryImpl @Inject constructor(
     }
 
     private fun LeagueDto.toDomainModel(): League? {
-        val id = idLeague ?: return null
-        val name = strLeague ?: return null
-        val sport = strSport ?: return null
+        val id = id ?: return null
+        val name = name ?: return null
+        val sport = sport ?: return null
         return League(id = id, name = name, sport = sport)
     }
 
     private fun TeamDto.toDomainModel(): Team? {
-        val id = idTeam ?: return null
-        val name = strTeam ?: return null
-        val badgeUrl = strTeamBadge ?: return null
-        val league = strLeague ?: return null
+        val id = id ?: return null
+        val name = name ?: return null
+        val badgeUrl = badgeUrl.orEmpty()
+        val league = leagueName ?: return null
         return Team(id = id, name = name, badgeUrl = badgeUrl, league = league)
     }
 }
