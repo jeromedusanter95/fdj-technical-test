@@ -79,6 +79,9 @@ dependencies {
     // Coil
     implementation(libs.coil.compose)
 
+    // Lottie
+    implementation(libs.lottie.compose)
+
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
 

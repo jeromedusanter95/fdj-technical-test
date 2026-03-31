@@ -17,9 +17,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jeromedusanter.fdjtest.domain.model.League
-import com.jeromedusanter.fdjtest.ui.components.ErrorMessage
 import com.jeromedusanter.fdjtest.ui.components.LeagueSearchItem
-import com.jeromedusanter.fdjtest.ui.components.LoadingIndicator
+import com.jeromedusanter.fdjtest.ui.components.LottieEmptyState
+import com.jeromedusanter.fdjtest.ui.components.LottieErrorState
+import com.jeromedusanter.fdjtest.ui.components.LottieLoadingState
 import com.jeromedusanter.fdjtest.ui.components.SearchTextField
 
 @Composable
@@ -71,12 +72,17 @@ private fun LeagueSearchContent(
 
             when {
                 uiState.isLoading -> {
-                    LoadingIndicator()
+                    LottieLoadingState()
                 }
                 uiState.errorMessage != null -> {
-                    ErrorMessage(
+                    LottieErrorState(
                         message = uiState.errorMessage,
                         onRetry = onRetry
+                    )
+                }
+                uiState.showNoResults -> {
+                    LottieEmptyState(
+                        message = "No leagues found for \"${uiState.searchQuery}\""
                     )
                 }
                 uiState.filteredLeagues.isNotEmpty() -> {
@@ -131,6 +137,20 @@ private fun LeagueSearchScreenWithResultsPreview() {
 private fun LeagueSearchScreenErrorPreview() {
     LeagueSearchContent(
         uiState = LeagueSearchUiState(errorMessage = "Failed to load leagues"),
+        onSearchQueryChange = {},
+        onLeagueClick = {},
+        onRetry = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun LeagueSearchScreenEmptyPreview() {
+    LeagueSearchContent(
+        uiState = LeagueSearchUiState(
+            searchQuery = "xyz",
+            showNoResults = true
+        ),
         onSearchQueryChange = {},
         onLeagueClick = {},
         onRetry = {}

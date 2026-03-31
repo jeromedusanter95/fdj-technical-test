@@ -20,7 +20,8 @@ data class LeagueSearchUiState(
     val leagues: List<League> = emptyList(),
     val filteredLeagues: List<League> = emptyList(),
     val isLoading: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val showNoResults: Boolean = false
 )
 
 @HiltViewModel
@@ -44,10 +45,10 @@ class LeagueSearchViewModel @Inject constructor(
         searchJob?.cancel()
 
         if (query.isBlank()) {
-            _uiState.update { it.copy(filteredLeagues = emptyList(), errorMessage = null) }
+            _uiState.update { it.copy(filteredLeagues = emptyList(), errorMessage = null, showNoResults = false) }
         } else {
             searchJob = viewModelScope.launch {
-                delay(300)
+                delay(SEARCH_DELAY)
                 searchLeagues(query)
             }
         }
@@ -86,12 +87,19 @@ class LeagueSearchViewModel @Inject constructor(
             searchLeaguesUseCase(query)
                 .onSuccess { leagues ->
                     _uiState.update {
-                        it.copy(filteredLeagues = leagues)
+                        it.copy(
+                            filteredLeagues = leagues,
+                            showNoResults = query.length > 2 && leagues.isEmpty(),
+                            errorMessage = null
+                        )
                     }
                 }
                 .onFailure { exception ->
                     _uiState.update {
-                        it.copy(errorMessage = exception.message)
+                        it.copy(
+                            errorMessage = exception.message,
+                            showNoResults = false
+                        )
                     }
                 }
         }
@@ -99,5 +107,9 @@ class LeagueSearchViewModel @Inject constructor(
 
     fun retry() {
         loadLeagues()
+    }
+
+    companion object {
+        private const val SEARCH_DELAY: Long = 300L
     }
 }
