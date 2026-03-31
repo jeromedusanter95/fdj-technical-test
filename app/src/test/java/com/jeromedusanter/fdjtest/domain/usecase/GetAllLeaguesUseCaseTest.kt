@@ -1,7 +1,6 @@
 package com.jeromedusanter.fdjtest.domain.usecase
 
 import com.jeromedusanter.fdjtest.domain.model.League
-import com.jeromedusanter.fdjtest.domain.model.Result
 import com.jeromedusanter.fdjtest.domain.repository.SportsRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -30,35 +29,35 @@ class GetAllLeaguesUseCaseTest {
             League("2", "Spanish La Liga", "Soccer"),
             League("3", "NBA", "Basketball")
         )
-        coEvery { repository.getAllLeagues() } returns Result.Success(leagues)
+        coEvery { repository.getAllLeagues() } returns Result.success(leagues)
 
         val result = useCase.invoke()
 
-        assertTrue(result is Result.Success)
-        assertEquals(leagues, (result as Result.Success).data)
+        assertTrue(result.isSuccess)
+        assertEquals(leagues, result.getOrNull())
 
         coVerify(exactly = 1) { repository.getAllLeagues() }
     }
 
     @Test
     fun `invoke should return empty list when repository returns empty`() = runTest {
-        coEvery { repository.getAllLeagues() } returns Result.Success(emptyList())
+        coEvery { repository.getAllLeagues() } returns Result.success(emptyList())
 
         val result = useCase.invoke()
 
-        assertTrue(result is Result.Success)
-        assertEquals(0, (result as Result.Success).data.size)
+        assertTrue(result.isSuccess)
+        assertEquals(0, result.getOrNull()?.size)
     }
 
     @Test
     fun `invoke should return error when repository fails`() = runTest {
         val exception = Exception("Network error")
-        coEvery { repository.getAllLeagues() } returns Result.Error(exception)
+        coEvery { repository.getAllLeagues() } returns Result.failure(exception)
 
         val result = useCase.invoke()
 
-        assertTrue(result is Result.Error)
-        assertEquals(exception, (result as Result.Error).exception)
+        assertTrue(result.isFailure)
+        assertEquals(exception, result.exceptionOrNull())
 
         coVerify(exactly = 1) { repository.getAllLeagues() }
     }

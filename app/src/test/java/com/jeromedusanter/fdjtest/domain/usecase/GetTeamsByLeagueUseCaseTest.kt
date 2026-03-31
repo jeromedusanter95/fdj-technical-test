@@ -1,6 +1,5 @@
 package com.jeromedusanter.fdjtest.domain.usecase
 
-import com.jeromedusanter.fdjtest.domain.model.Result
 import com.jeromedusanter.fdjtest.domain.model.Team
 import com.jeromedusanter.fdjtest.domain.repository.SportsRepository
 import io.mockk.coEvery
@@ -33,17 +32,17 @@ class GetTeamsByLeagueUseCaseTest {
             Team("5", "Everton", "badge5.png", "English Premier League"),
             Team("6", "Fiorentina", "badge6.png", "Italian Serie A")
         )
-        coEvery { repository.getTeamsByLeague("test league") } returns Result.Success(teams)
+        coEvery { repository.getTeamsByLeague("test league") } returns Result.success(teams)
 
         val result = useCase.invoke("test league")
 
-        assertTrue(result is Result.Success)
-        val processedTeams = (result as Result.Success).data
+        assertTrue(result.isSuccess)
+        val processedTeams = result.getOrNull()
 
-        assertEquals(3, processedTeams.size)
-        assertEquals("Fiorentina", processedTeams[0].name)
-        assertEquals("Dortmund", processedTeams[1].name)
-        assertEquals("Barcelona", processedTeams[2].name)
+        assertEquals(3, processedTeams?.size)
+        assertEquals("Fiorentina", processedTeams?.get(0)?.name)
+        assertEquals("Dortmund", processedTeams?.get(1)?.name)
+        assertEquals("Barcelona", processedTeams?.get(2)?.name)
 
         coVerify(exactly = 1) { repository.getTeamsByLeague("test league") }
     }
@@ -53,15 +52,15 @@ class GetTeamsByLeagueUseCaseTest {
         val teams = listOf(
             Team("1", "Arsenal", "badge1.png", "English Premier League")
         )
-        coEvery { repository.getTeamsByLeague("test league") } returns Result.Success(teams)
+        coEvery { repository.getTeamsByLeague("test league") } returns Result.success(teams)
 
         val result = useCase.invoke("test league")
 
-        assertTrue(result is Result.Success)
-        val processedTeams = (result as Result.Success).data
+        assertTrue(result.isSuccess)
+        val processedTeams = result.getOrNull()
 
-        assertEquals(1, processedTeams.size)
-        assertEquals("Arsenal", processedTeams[0].name)
+        assertEquals(1, processedTeams?.size)
+        assertEquals("Arsenal", processedTeams?.get(0)?.name)
     }
 
     @Test
@@ -70,38 +69,38 @@ class GetTeamsByLeagueUseCaseTest {
             Team("1", "Arsenal", "badge1.png", "English Premier League"),
             Team("2", "Barcelona", "badge2.png", "Spanish La Liga")
         )
-        coEvery { repository.getTeamsByLeague("test league") } returns Result.Success(teams)
+        coEvery { repository.getTeamsByLeague("test league") } returns Result.success(teams)
 
         val result = useCase.invoke("test league")
 
-        assertTrue(result is Result.Success)
-        val processedTeams = (result as Result.Success).data
+        assertTrue(result.isSuccess)
+        val processedTeams = result.getOrNull()
 
-        assertEquals(1, processedTeams.size)
-        assertEquals("Barcelona", processedTeams[0].name)
+        assertEquals(1, processedTeams?.size)
+        assertEquals("Barcelona", processedTeams?.get(0)?.name)
     }
 
     @Test
     fun `invoke should handle empty list`() = runTest {
-        coEvery { repository.getTeamsByLeague("test league") } returns Result.Success(emptyList())
+        coEvery { repository.getTeamsByLeague("test league") } returns Result.success(emptyList())
 
         val result = useCase.invoke("test league")
 
-        assertTrue(result is Result.Success)
-        val processedTeams = (result as Result.Success).data
+        assertTrue(result.isSuccess)
+        val processedTeams = result.getOrNull()
 
-        assertEquals(0, processedTeams.size)
+        assertEquals(0, processedTeams?.size)
     }
 
     @Test
     fun `invoke should return error when repository fails`() = runTest {
         val exception = Exception("Network error")
-        coEvery { repository.getTeamsByLeague("test league") } returns Result.Error(exception)
+        coEvery { repository.getTeamsByLeague("test league") } returns Result.failure(exception)
 
         val result = useCase.invoke("test league")
 
-        assertTrue(result is Result.Error)
-        assertEquals(exception, (result as Result.Error).exception)
+        assertTrue(result.isFailure)
+        assertEquals(exception, result.exceptionOrNull())
 
         coVerify(exactly = 1) { repository.getTeamsByLeague("test league") }
     }
@@ -115,16 +114,16 @@ class GetTeamsByLeagueUseCaseTest {
             Team("4", "D Team", "badge4.png", "League"),
             Team("5", "E Team", "badge5.png", "League")
         )
-        coEvery { repository.getTeamsByLeague("test league") } returns Result.Success(teams)
+        coEvery { repository.getTeamsByLeague("test league") } returns Result.success(teams)
 
         val result = useCase.invoke("test league")
 
-        assertTrue(result is Result.Success)
-        val processedTeams = (result as Result.Success).data
+        assertTrue(result.isSuccess)
+        val processedTeams = result.getOrNull()
 
-        assertEquals(3, processedTeams.size)
-        assertEquals("E Team", processedTeams[0].name)
-        assertEquals("C Team", processedTeams[1].name)
-        assertEquals("A Team", processedTeams[2].name)
+        assertEquals(3, processedTeams?.size)
+        assertEquals("E Team", processedTeams?.get(0)?.name)
+        assertEquals("C Team", processedTeams?.get(1)?.name)
+        assertEquals("A Team", processedTeams?.get(2)?.name)
     }
 }
