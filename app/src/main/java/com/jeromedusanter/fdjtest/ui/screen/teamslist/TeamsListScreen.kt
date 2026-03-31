@@ -53,7 +53,7 @@ private fun TeamsListContent(
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        topAppBar = {
+        topBar = {
             TopAppBar(
                 title = { Text(uiState.leagueName) },
                 navigationIcon = {

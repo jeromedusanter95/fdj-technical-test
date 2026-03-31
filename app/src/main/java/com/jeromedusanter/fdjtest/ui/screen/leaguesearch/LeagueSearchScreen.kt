@@ -53,7 +53,7 @@ private fun LeagueSearchContent(
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
-        topAppBar = {
+        topBar = {
             TopAppBar(title = { Text("Search League") })
         }
     ) { paddingValues ->
