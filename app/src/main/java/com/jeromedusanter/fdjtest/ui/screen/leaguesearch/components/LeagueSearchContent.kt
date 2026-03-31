@@ -15,9 +15,11 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.jeromedusanter.fdjtest.R
 import com.jeromedusanter.fdjtest.domain.model.League
 import com.jeromedusanter.fdjtest.ui.components.EmptyState
 import com.jeromedusanter.fdjtest.ui.components.ErrorState
@@ -44,7 +46,7 @@ fun LeagueSearchContent(
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = "FDJ Test",
+                            text = stringResource(R.string.title_fdj_test),
                             textAlign = TextAlign.Center
                         )
                     }
@@ -61,7 +63,7 @@ fun LeagueSearchContent(
             SearchTextField(
                 value = uiState.searchQuery,
                 onValueChange = onSearchQueryChange,
-                placeholder = "Search league..."
+                placeholder = stringResource(R.string.search_league_placeholder)
             )
 
             when {
@@ -76,7 +78,7 @@ fun LeagueSearchContent(
                 }
                 uiState.showNoResults -> {
                     EmptyState(
-                        message = "No leagues found for \"${uiState.searchQuery}\""
+                        message = stringResource(R.string.no_leagues_found, uiState.searchQuery)
                     )
                 }
                 uiState.filteredLeagues.isNotEmpty() -> {

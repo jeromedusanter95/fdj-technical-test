@@ -17,8 +17,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.jeromedusanter.fdjtest.R
 import com.jeromedusanter.fdjtest.domain.model.Team
 import com.jeromedusanter.fdjtest.ui.components.EmptyState
 import com.jeromedusanter.fdjtest.ui.components.ErrorState
@@ -62,7 +64,7 @@ fun TeamsListContent(
             }
             uiState.teams.isEmpty() -> {
                 EmptyState(
-                    message = "No teams found for this league",
+                    message = stringResource(R.string.no_teams_found),
                     modifier = Modifier.padding(paddingValues)
                 )
             }
