@@ -7,14 +7,14 @@ import com.jeromedusanter.fdjtest.domain.model.League
 import com.jeromedusanter.fdjtest.domain.model.Result
 import com.jeromedusanter.fdjtest.domain.model.Team
 import com.jeromedusanter.fdjtest.domain.repository.SportsRepository
+import com.jeromedusanter.fdjtest.di.IoDispatcher
 import javax.inject.Inject
-import kotlin.coroutines.Coroutine Context
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
 class SportsRepositoryImpl @Inject constructor(
     private val apiService: SportsApiService,
-    private val ioDispatcher: CoroutineDispatcher
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : SportsRepository {
 
     override suspend fun getAllLeagues(): Result<List<League>> = withContext(ioDispatcher) {
