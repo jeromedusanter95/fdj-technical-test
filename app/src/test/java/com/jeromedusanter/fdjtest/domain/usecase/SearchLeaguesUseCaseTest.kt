@@ -24,6 +24,7 @@ class SearchLeaguesUseCaseTest {
 
     @Test
     fun `invoke should return empty list when query is blank`() = runTest {
+        // Given
         val leagues = listOf(
             League("1", "English Premier League", "Soccer"),
             League("2", "Spanish La Liga", "Soccer"),
@@ -31,16 +32,18 @@ class SearchLeaguesUseCaseTest {
         )
         coEvery { repository.getAllLeagues() } returns Result.success(leagues)
 
+        // When
         val result = useCase.invoke("")
 
+        // Then
         assertTrue(result.isSuccess)
         assertEquals(0, result.getOrNull()?.size)
-
         coVerify(exactly = 1) { repository.getAllLeagues() }
     }
 
     @Test
     fun `invoke should filter leagues by query case insensitive`() = runTest {
+        // Given
         val leagues = listOf(
             League("1", "English Premier League", "Soccer"),
             League("2", "Spanish La Liga", "Soccer"),
@@ -49,20 +52,21 @@ class SearchLeaguesUseCaseTest {
         )
         coEvery { repository.getAllLeagues() } returns Result.success(leagues)
 
+        // When
         val result = useCase.invoke("league")
 
+        // Then
         assertTrue(result.isSuccess)
         val filteredLeagues = result.getOrNull()
-
         assertEquals(2, filteredLeagues?.size)
         assertTrue(filteredLeagues?.any { it.name == "English Premier League" } == true)
         assertTrue(filteredLeagues?.any { it.name == "Champions League" } == true)
-
         coVerify(exactly = 1) { repository.getAllLeagues() }
     }
 
     @Test
     fun `invoke should handle uppercase query`() = runTest {
+        // Given
         val leagues = listOf(
             League("1", "English Premier League", "Soccer"),
             League("2", "Spanish La Liga", "Soccer"),
@@ -70,52 +74,61 @@ class SearchLeaguesUseCaseTest {
         )
         coEvery { repository.getAllLeagues() } returns Result.success(leagues)
 
+        // When
         val result = useCase.invoke("ENGLISH")
 
+        // Then
         assertTrue(result.isSuccess)
         val filteredLeagues = result.getOrNull()
-
         assertEquals(1, filteredLeagues?.size)
         assertEquals("English Premier League", filteredLeagues?.get(0)?.name)
     }
 
     @Test
     fun `invoke should return empty list when no matches found`() = runTest {
+        // Given
         val leagues = listOf(
             League("1", "English Premier League", "Soccer"),
             League("2", "Spanish La Liga", "Soccer")
         )
         coEvery { repository.getAllLeagues() } returns Result.success(leagues)
 
+        // When
         val result = useCase.invoke("xyz")
 
+        // Then
         assertTrue(result.isSuccess)
         assertEquals(0, result.getOrNull()?.size)
     }
 
     @Test
     fun `invoke should return error when repository fails`() = runTest {
+        // Given
         val exception = Exception("Network error")
         coEvery { repository.getAllLeagues() } returns Result.failure(exception)
 
+        // When
         val result = useCase.invoke("test")
 
+        // Then
         assertTrue(result.isFailure)
         assertEquals(exception, result.exceptionOrNull())
-
         coVerify(exactly = 1) { repository.getAllLeagues() }
     }
 
     @Test
     fun `invoke should handle whitespace query`() = runTest {
+        // Given
         val leagues = listOf(
             League("1", "English Premier League", "Soccer"),
             League("2", "Spanish La Liga", "Soccer")
         )
         coEvery { repository.getAllLeagues() } returns Result.success(leagues)
 
+        // When
         val result = useCase.invoke("   ")
 
+        // Then
         assertTrue(result.isSuccess)
         assertEquals(0, result.getOrNull()?.size)
     }

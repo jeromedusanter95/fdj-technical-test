@@ -24,6 +24,7 @@ class GetAllLeaguesUseCaseTest {
 
     @Test
     fun `invoke should return success with leagues from repository`() = runTest {
+        // Given
         val leagues = listOf(
             League("1", "English Premier League", "Soccer"),
             League("2", "Spanish La Liga", "Soccer"),
@@ -31,34 +32,40 @@ class GetAllLeaguesUseCaseTest {
         )
         coEvery { repository.getAllLeagues() } returns Result.success(leagues)
 
+        // When
         val result = useCase.invoke()
 
+        // Then
         assertTrue(result.isSuccess)
         assertEquals(leagues, result.getOrNull())
-
         coVerify(exactly = 1) { repository.getAllLeagues() }
     }
 
     @Test
     fun `invoke should return empty list when repository returns empty`() = runTest {
+        // Given
         coEvery { repository.getAllLeagues() } returns Result.success(emptyList())
 
+        // When
         val result = useCase.invoke()
 
+        // Then
         assertTrue(result.isSuccess)
         assertEquals(0, result.getOrNull()?.size)
     }
 
     @Test
     fun `invoke should return error when repository fails`() = runTest {
+        // Given
         val exception = Exception("Network error")
         coEvery { repository.getAllLeagues() } returns Result.failure(exception)
 
+        // When
         val result = useCase.invoke()
 
+        // Then
         assertTrue(result.isFailure)
         assertEquals(exception, result.exceptionOrNull())
-
         coVerify(exactly = 1) { repository.getAllLeagues() }
     }
 }

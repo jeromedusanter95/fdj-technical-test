@@ -24,6 +24,7 @@ class GetTeamsByLeagueUseCaseTest {
 
     @Test
     fun `invoke should sort teams in reverse alphabetical order and filter every other team`() = runTest {
+        // Given
         val teams = listOf(
             Team("1", "Arsenal", "badge1.png", "English Premier League"),
             Team("2", "Barcelona", "badge2.png", "Spanish La Liga"),
@@ -34,79 +35,88 @@ class GetTeamsByLeagueUseCaseTest {
         )
         coEvery { repository.getTeamsByLeague("test league") } returns Result.success(teams)
 
+        // When
         val result = useCase.invoke("test league")
 
+        // Then
         assertTrue(result.isSuccess)
         val processedTeams = result.getOrNull()
-
         assertEquals(3, processedTeams?.size)
         assertEquals("Fiorentina", processedTeams?.get(0)?.name)
         assertEquals("Dortmund", processedTeams?.get(1)?.name)
         assertEquals("Barcelona", processedTeams?.get(2)?.name)
-
         coVerify(exactly = 1) { repository.getTeamsByLeague("test league") }
     }
 
     @Test
     fun `invoke should handle single team correctly`() = runTest {
+        // Given
         val teams = listOf(
             Team("1", "Arsenal", "badge1.png", "English Premier League")
         )
         coEvery { repository.getTeamsByLeague("test league") } returns Result.success(teams)
 
+        // When
         val result = useCase.invoke("test league")
 
+        // Then
         assertTrue(result.isSuccess)
         val processedTeams = result.getOrNull()
-
         assertEquals(1, processedTeams?.size)
         assertEquals("Arsenal", processedTeams?.get(0)?.name)
     }
 
     @Test
     fun `invoke should handle two teams correctly`() = runTest {
+        // Given
         val teams = listOf(
             Team("1", "Arsenal", "badge1.png", "English Premier League"),
             Team("2", "Barcelona", "badge2.png", "Spanish La Liga")
         )
         coEvery { repository.getTeamsByLeague("test league") } returns Result.success(teams)
 
+        // When
         val result = useCase.invoke("test league")
 
+        // Then
         assertTrue(result.isSuccess)
         val processedTeams = result.getOrNull()
-
         assertEquals(1, processedTeams?.size)
         assertEquals("Barcelona", processedTeams?.get(0)?.name)
     }
 
     @Test
     fun `invoke should handle empty list`() = runTest {
+        // Given
         coEvery { repository.getTeamsByLeague("test league") } returns Result.success(emptyList())
 
+        // When
         val result = useCase.invoke("test league")
 
+        // Then
         assertTrue(result.isSuccess)
         val processedTeams = result.getOrNull()
-
         assertEquals(0, processedTeams?.size)
     }
 
     @Test
     fun `invoke should return error when repository fails`() = runTest {
+        // Given
         val exception = Exception("Network error")
         coEvery { repository.getTeamsByLeague("test league") } returns Result.failure(exception)
 
+        // When
         val result = useCase.invoke("test league")
 
+        // Then
         assertTrue(result.isFailure)
         assertEquals(exception, result.exceptionOrNull())
-
         coVerify(exactly = 1) { repository.getTeamsByLeague("test league") }
     }
 
     @Test
     fun `invoke should verify filtering keeps indices 0, 2, 4 after sorting`() = runTest {
+        // Given
         val teams = listOf(
             Team("1", "A Team", "badge1.png", "League"),
             Team("2", "B Team", "badge2.png", "League"),
@@ -116,11 +126,12 @@ class GetTeamsByLeagueUseCaseTest {
         )
         coEvery { repository.getTeamsByLeague("test league") } returns Result.success(teams)
 
+        // When
         val result = useCase.invoke("test league")
 
+        // Then
         assertTrue(result.isSuccess)
         val processedTeams = result.getOrNull()
-
         assertEquals(3, processedTeams?.size)
         assertEquals("E Team", processedTeams?.get(0)?.name)
         assertEquals("C Team", processedTeams?.get(1)?.name)
