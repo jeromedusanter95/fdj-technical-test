@@ -136,7 +136,6 @@ fun LeagueSearchContent(
 ### Testing
 - **JUnit 4** - Testing framework
 - **MockK** - Kotlin-friendly mocking library
-- **Turbine** - Flow testing library
 - **Coroutines Test** - Testing coroutines with `StandardTestDispatcher` and `UnconfinedTestDispatcher`
 
 ### Build
