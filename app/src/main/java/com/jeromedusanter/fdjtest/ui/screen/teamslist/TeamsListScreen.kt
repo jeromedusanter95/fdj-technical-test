@@ -18,14 +18,12 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.jeromedusanter.fdjtest.domain.model.Team
 import com.jeromedusanter.fdjtest.ui.components.ErrorMessage
 import com.jeromedusanter.fdjtest.ui.components.LoadingIndicator
-import com.jeromedusanter.fdjtest.ui.components.TeamCard
+import com.jeromedusanter.fdjtest.ui.screen.teamslist.components.TeamCard
 
 @Composable
 fun TeamsListScreen(
@@ -108,48 +106,4 @@ private fun TeamsListContent(
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun TeamsListScreenLoadingPreview() {
-    TeamsListContent(
-        uiState = TeamsListUiState(
-            leagueName = "French Ligue 1",
-            isLoading = true
-        ),
-        onBackClick = {},
-        onRetry = {}
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun TeamsListScreenWithTeamsPreview() {
-    TeamsListContent(
-        uiState = TeamsListUiState(
-            leagueName = "French Ligue 1",
-            teams = listOf(
-                Team("1", "Paris Saint-Germain", "https://example.com/psg.png", "French Ligue 1"),
-                Team("2", "Olympique Marseille", "https://example.com/om.png", "French Ligue 1"),
-                Team("3", "AS Monaco", "https://example.com/monaco.png", "French Ligue 1"),
-                Team("4", "Lille OSC", "https://example.com/lille.png", "French Ligue 1")
-            )
-        ),
-        onBackClick = {},
-        onRetry = {}
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun TeamsListScreenErrorPreview() {
-    TeamsListContent(
-        uiState = TeamsListUiState(
-            leagueName = "French Ligue 1",
-            errorMessage = "Failed to load teams"
-        ),
-        onBackClick = {},
-        onRetry = {}
-    )
 }

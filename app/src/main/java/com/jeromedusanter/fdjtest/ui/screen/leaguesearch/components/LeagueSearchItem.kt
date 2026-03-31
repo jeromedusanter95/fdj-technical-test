@@ -1,4 +1,4 @@
-package com.jeromedusanter.fdjtest.ui.components
+package com.jeromedusanter.fdjtest.ui.screen.leaguesearch.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column

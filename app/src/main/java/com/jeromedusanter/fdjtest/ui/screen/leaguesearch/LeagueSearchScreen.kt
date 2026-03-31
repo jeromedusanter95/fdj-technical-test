@@ -12,16 +12,15 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jeromedusanter.fdjtest.domain.model.League
-import com.jeromedusanter.fdjtest.ui.components.LeagueSearchItem
 import com.jeromedusanter.fdjtest.ui.components.LottieEmptyState
 import com.jeromedusanter.fdjtest.ui.components.LottieErrorState
 import com.jeromedusanter.fdjtest.ui.components.LottieLoadingState
 import com.jeromedusanter.fdjtest.ui.components.SearchTextField
+import com.jeromedusanter.fdjtest.ui.screen.leaguesearch.components.LeagueSearchItem
 
 @Composable
 fun LeagueSearchScreen(
@@ -102,57 +101,4 @@ private fun LeagueSearchContent(
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun LeagueSearchScreenLoadingPreview() {
-    LeagueSearchContent(
-        uiState = LeagueSearchUiState(isLoading = true),
-        onSearchQueryChange = {},
-        onLeagueClick = {},
-        onRetry = {}
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun LeagueSearchScreenWithResultsPreview() {
-    LeagueSearchContent(
-        uiState = LeagueSearchUiState(
-            searchQuery = "French",
-            filteredLeagues = listOf(
-                League("1", "French Ligue 1", "Soccer"),
-                League("2", "French Ligue 2", "Soccer")
-            )
-        ),
-        onSearchQueryChange = {},
-        onLeagueClick = {},
-        onRetry = {}
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun LeagueSearchScreenErrorPreview() {
-    LeagueSearchContent(
-        uiState = LeagueSearchUiState(errorMessage = "Failed to load leagues"),
-        onSearchQueryChange = {},
-        onLeagueClick = {},
-        onRetry = {}
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun LeagueSearchScreenEmptyPreview() {
-    LeagueSearchContent(
-        uiState = LeagueSearchUiState(
-            searchQuery = "xyz",
-            showNoResults = true
-        ),
-        onSearchQueryChange = {},
-        onLeagueClick = {},
-        onRetry = {}
-    )
 }

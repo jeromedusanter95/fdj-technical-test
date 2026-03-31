@@ -1,4 +1,4 @@
-package com.jeromedusanter.fdjtest.ui.components
+package com.jeromedusanter.fdjtest.ui.screen.teamslist.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
