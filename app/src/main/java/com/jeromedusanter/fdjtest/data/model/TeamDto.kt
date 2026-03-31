@@ -5,8 +5,8 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class TeamDto(
-    @Json(name = "idTeam") val idTeam: String?,
-    @Json(name = "strTeam") val strTeam: String?,
-    @Json(name = "strTeamBadge") val strTeamBadge: String?,
-    @Json(name = "strLeague") val strLeague: String?
+    @field:Json(name = "idTeam") val idTeam: String?,
+    @field:Json(name = "strTeam") val strTeam: String?,
+    @field:Json(name = "strTeamBadge") val strTeamBadge: String?,
+    @field:Json(name = "strLeague") val strLeague: String?
 )

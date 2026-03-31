@@ -5,5 +5,5 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class LeaguesResponse(
-    @Json(name = "leagues") val leagues: List<LeagueDto>?
+    @field:Json(name = "leagues") val leagues: List<LeagueDto>?
 )
