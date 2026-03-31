@@ -162,5 +162,4 @@ class MainDispatcherRule(
 ## 👤 Author
 
 **Jérôme Dusanter**
-- GitHub: [@jerome-dusanter](https://github.com/jerome-dusanter)
 - Email: dusanter.jerome@gmail.com
