@@ -6,6 +6,8 @@ import com.jeromedusanter.fdjtest.domain.model.League
 import com.jeromedusanter.fdjtest.domain.usecase.GetAllLeaguesUseCase
 import com.jeromedusanter.fdjtest.domain.usecase.SearchLeaguesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,13 +32,25 @@ class LeagueSearchViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(LeagueSearchUiState())
     val uiState: StateFlow<LeagueSearchUiState> = _uiState.asStateFlow()
 
+    private var searchJob: Job? = null
+
     init {
         loadLeagues()
     }
 
     fun onSearchQueryChange(query: String) {
         _uiState.update { it.copy(searchQuery = query) }
-        searchLeagues(query)
+
+        searchJob?.cancel()
+
+        if (query.isBlank()) {
+            _uiState.update { it.copy(filteredLeagues = emptyList(), errorMessage = null) }
+        } else {
+            searchJob = viewModelScope.launch {
+                delay(300)
+                searchLeagues(query)
+            }
+        }
     }
 
     fun onLeagueSelected(league: League) {
